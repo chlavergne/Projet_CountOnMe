@@ -20,7 +20,7 @@ class ViewController: UIViewController {
     // View Life cycles
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        connectModel()
     }
     
     
@@ -29,36 +29,23 @@ class ViewController: UIViewController {
         guard let numberText = sender.title(for: .normal) else {
             return
         }
-        
-        if expressionHaveResult {
-            textView.text = ""
-        }
-        
-        textView.text.append(numberText)
+        calculator.addNumber(number: numberText)
     }
     
     @IBAction func tappedAdditionButton(_ sender: UIButton) {
-        if canAddOperator {
-            textView.text.append(" + ")
-        } else {
-            let alertVC = UIAlertController(title: "Zéro!", message: "Un operateur est déja mis !", preferredStyle: .alert)
-            alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-            self.present(alertVC, animated: true, completion: nil)
-        }
+        guard let plusSymbol = sender.title(for: .normal) else {
+            return }
+        calculator.addAddition(with: plusSymbol)
     }
     
     @IBAction func tappedSubstractionButton(_ sender: UIButton) {
-        if canAddOperator {
-            textView.text.append(" - ")
-        } else {
-            let alertVC = UIAlertController(title: "Zéro!", message: "Un operateur est déja mis !", preferredStyle: .alert)
-            alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-            self.present(alertVC, animated: true, completion: nil)
-        }
+        guard let minusSymbol = sender.title(for: .normal) else {
+            return }
+        calculator.addSoustraction(with: minusSymbol)
     }
     
     @IBAction func tappedEqualButton(_ sender: UIButton) {
-        calculator.tapEqual()
+        calculator.addEqual()
     }
     
     func errorMessage(message: String) -> Void {
@@ -68,7 +55,9 @@ class ViewController: UIViewController {
     }
     
     func connectModel() {
-        textView.text = calculator.textOnScreen
+        calculator.textOnScreen = {textOnScreen in
+            self.textView.text = textOnScreen
+        }
         calculator.errorMessage = errorMessage
     }
 }

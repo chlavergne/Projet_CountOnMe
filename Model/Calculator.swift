@@ -10,16 +10,22 @@ import Foundation
 
 final class Calculator {
     
-    private var equation = ""
-    
     var errorMessage: ((String) -> Void)?
     
-    var textOnScreen: String {
-        return equation
+    var textOnScreen: ((String) -> Void)?
+    
+    init() {
+        equation = ""
+    }
+    
+    var equation : String {
+        didSet {
+            textOnScreen?(equation)
+        }
     }
     
     
-    var elements: [String] {
+    private var elements: [String] {
         return equation.split(separator: " ").map { "\($0)" }
     }
     
@@ -40,7 +46,14 @@ final class Calculator {
         return equation.firstIndex(of: "=") != nil
     }
     
-    func tapEqual() {
+    func addNumber(number: String) {
+        if expressionHaveResult {
+            equation = ""
+        }
+        equation.append(number)
+    }
+    
+    func addEqual() {
         guard expressionIsCorrect else {
             errorMessage?("Entrez une expression correcte !")
             return
@@ -74,12 +87,20 @@ final class Calculator {
         equation.append(" = \(operationsToReduce.first!)")
     }
     
-    func addNumber(number: String) {
-        if expressionHaveResult {
-            equation = ""
+    func addAddition(with plusSymbol: String) {
+        if canAddOperator {
+            equation.append(" + ")
+        } else {
+            errorMessage?("Un opérateur est déjà mis !")
         }
-        
-        textOnScreen.append(number)
+    }
+    
+    func addSoustraction(with minusSymbil: String) {
+        if canAddOperator {
+            equation.append(" - ")
+        } else {
+            errorMessage?("Un opérateur est déjà mis !")
+        }
     }
 }
 
