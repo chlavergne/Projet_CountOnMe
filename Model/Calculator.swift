@@ -87,7 +87,7 @@ final class Calculator {
         equation.append(" = \(operationsToReduce.first!)")
     }
     
-    func addAddition(with plusSymbol: String) {
+    func addAddition() {
         if canAddOperator {
             equation.append(" + ")
         } else {
@@ -95,12 +95,29 @@ final class Calculator {
         }
     }
     
-    func addSoustraction(with minusSymbil: String) {
+    func addSoustraction() {
         if canAddOperator {
             equation.append(" - ")
         } else {
             errorMessage?("Un opérateur est déjà mis !")
         }
     }
+    
+    func addMultiplication() {
+        if canAddOperator {
+            equation.append(" * ")
+        } else {
+            errorMessage?("Un opérateur est déjà mis !")
+        }
+    }
+    
+    func addDivision() {
+        if canAddOperator {
+            equation.append(" / ")
+        } else {
+            errorMessage?("Un opérateur est déjà mis !")
+        }
+    }
+    
 }
 

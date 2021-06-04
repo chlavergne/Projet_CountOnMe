@@ -33,15 +33,11 @@ class ViewController: UIViewController {
     }
     
     @IBAction func tappedAdditionButton(_ sender: UIButton) {
-        guard let plusSymbol = sender.title(for: .normal) else {
-            return }
-        calculator.addAddition(with: plusSymbol)
+        calculator.addAddition()
     }
     
     @IBAction func tappedSubstractionButton(_ sender: UIButton) {
-        guard let minusSymbol = sender.title(for: .normal) else {
-            return }
-        calculator.addSoustraction(with: minusSymbol)
+        calculator.addSoustraction()
     }
     
     @IBAction func tappedEqualButton(_ sender: UIButton) {
