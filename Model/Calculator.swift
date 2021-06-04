@@ -18,15 +18,14 @@ final class Calculator {
         equation = ""
     }
     
+    private var elements: [String] {
+        return equation.split(separator: " ").map { "\($0)" }
+    }
+    
     var equation : String {
         didSet {
             textOnScreen?(equation)
         }
-    }
-    
-    
-    private var elements: [String] {
-        return equation.split(separator: " ").map { "\($0)" }
     }
     
     // Error check computed variables
@@ -51,6 +50,38 @@ final class Calculator {
             equation = ""
         }
         equation.append(number)
+    }
+    
+    func addAddition() {
+        if canAddOperator {
+            equation.append(" + ")
+        } else {
+            errorMessage?("Un opérateur est déjà mis !")
+        }
+    }
+    
+    func addSoustraction() {
+        if canAddOperator {
+            equation.append(" - ")
+        } else {
+            errorMessage?("Un opérateur est déjà mis !")
+        }
+    }
+    
+    func addMultiplication() {
+        if canAddOperator {
+            equation.append(" * ")
+        } else {
+            errorMessage?("Un opérateur est déjà mis !")
+        }
+    }
+    
+    func addDivision() {
+        if canAddOperator {
+            equation.append(" / ")
+        } else {
+            errorMessage?("Un opérateur est déjà mis !")
+        }
     }
     
     func addEqual() {
@@ -86,38 +117,4 @@ final class Calculator {
         
         equation.append(" = \(operationsToReduce.first!)")
     }
-    
-    func addAddition() {
-        if canAddOperator {
-            equation.append(" + ")
-        } else {
-            errorMessage?("Un opérateur est déjà mis !")
-        }
-    }
-    
-    func addSoustraction() {
-        if canAddOperator {
-            equation.append(" - ")
-        } else {
-            errorMessage?("Un opérateur est déjà mis !")
-        }
-    }
-    
-    func addMultiplication() {
-        if canAddOperator {
-            equation.append(" * ")
-        } else {
-            errorMessage?("Un opérateur est déjà mis !")
-        }
-    }
-    
-    func addDivision() {
-        if canAddOperator {
-            equation.append(" / ")
-        } else {
-            errorMessage?("Un opérateur est déjà mis !")
-        }
-    }
-    
 }
-

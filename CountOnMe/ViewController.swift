@@ -23,7 +23,6 @@ class ViewController: UIViewController {
         connectModel()
     }
     
-    
     // View actions
     @IBAction func tappedNumberButton(_ sender: UIButton) {
         guard let numberText = sender.title(for: .normal) else {
@@ -38,6 +37,14 @@ class ViewController: UIViewController {
     
     @IBAction func tappedSubstractionButton(_ sender: UIButton) {
         calculator.addSoustraction()
+    }
+    
+    @IBAction func tappedMultiplicationButton(_ sender: UIButton) {
+        calculator.addMultiplication()
+    }
+    
+    @IBAction func tappedDivisionButton(_ sender: UIButton) {
+        calculator.addDivision()
     }
     
     @IBAction func tappedEqualButton(_ sender: UIButton) {
