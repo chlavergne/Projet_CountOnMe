@@ -51,6 +51,10 @@ class ViewController: UIViewController {
         calculator.addEqual()
     }
     
+    @IBAction func tappedAcButton(_ sender: UIButton) {
+        calculator.addAC()
+    }
+    
     func errorMessage(message: String) -> Void {
         let alertVC = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
         alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
@@ -58,10 +62,10 @@ class ViewController: UIViewController {
     }
     
     func connectModel() {
+        calculator.errorMessage = errorMessage
         calculator.textOnScreen = {textOnScreen in
             self.textView.text = textOnScreen
         }
-        calculator.errorMessage = errorMessage
     }
 }
 

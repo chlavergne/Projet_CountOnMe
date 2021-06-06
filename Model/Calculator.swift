@@ -84,6 +84,11 @@ final class Calculator {
         }
     }
     
+    func addAC() {
+        equation.removeAll()
+        textOnScreen?("0")
+    }
+    
     func addEqual() {
         guard expressionIsCorrect else {
             errorMessage?("Entrez une expression correcte !")
