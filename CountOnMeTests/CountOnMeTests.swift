@@ -29,7 +29,7 @@ class CalculatorTest: XCTestCase {
     func testGivenExpressionHaveAResult_WhenAddNumber_ThenEquationIsAnEmptySring() {
         createAnAddition()
         calculator.addEqual()
-        calculator.addNumber(number: "3")
+        calculator.addNumber(number: "A")
         XCTAssertEqual(calculator.equation, "3")
     }
     
