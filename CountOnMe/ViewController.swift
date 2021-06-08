@@ -15,7 +15,7 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var textView: UITextView!
     @IBOutlet var numberButtons: [UIButton]!
-    
+    @IBOutlet var operartorButtons: [UIButton]!
     
     // View Life cycles
     override func viewDidLoad() {
@@ -31,20 +31,11 @@ class ViewController: UIViewController {
         calculator.addNumber(number: numberText)
     }
     
-    @IBAction func tappedAdditionButton(_ sender: UIButton) {
-        calculator.addAddition()
-    }
-    
-    @IBAction func tappedSubstractionButton(_ sender: UIButton) {
-        calculator.addSoustraction()
-    }
-    
-    @IBAction func tappedMultiplicationButton(_ sender: UIButton) {
-        calculator.addMultiplication()
-    }
-    
-    @IBAction func tappedDivisionButton(_ sender: UIButton) {
-        calculator.addDivision()
+    @IBAction func tappedOperator(_ sender: UIButton) {
+        guard let operatorText = sender.title(for: .normal) else {
+            return
+        }
+        calculator.addOperator(operatorSymbol: operatorText)
     }
     
     @IBAction func tappedEqualButton(_ sender: UIButton) {

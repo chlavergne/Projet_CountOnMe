@@ -29,14 +29,14 @@ class CalculatorTest: XCTestCase {
     func testGivenExpressionHaveAResult_WhenAddNumber_ThenEquationIsAnEmptySring() {
         createAnAddition()
         calculator.addEqual()
-        calculator.addNumber(number: "A")
+        calculator.addNumber(number: "3")
         XCTAssertEqual(calculator.equation, "3")
     }
     
     func testGivenExpressionIsCorrect_WhenExpressionToCalaculateIsNotFinashingByAnOperator_ThenReturnTrue() {
         createAnAddition()
         XCTAssertTrue(calculator.expressionIsCorrect)
-        calculator.addSoustraction()
+        calculator.addDivision()
         XCTAssertFalse(calculator.expressionIsCorrect)
     }
     
@@ -68,6 +68,11 @@ class CalculatorTest: XCTestCase {
         XCTAssertNotEqual(calculator.equation, "8")
     }
     
+    func testGivenAnExpressionExist_WhenTappedACButton_ThenEquationShouldBeEmpty() {
+        createAnAddition()
+        calculator.addAC()
+        XCTAssertTrue(calculator.equation == "")
+    }
     
     func testGivenAddAddition_WhenAddAdditionAgain_ThenErrorMessage() {
         calculator.addAddition()

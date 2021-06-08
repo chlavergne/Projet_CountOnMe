@@ -30,7 +30,7 @@ final class Calculator {
     
     // Error check computed variables
     var expressionIsCorrect: Bool {
-        return elements.last != "+" && elements.last != "-"
+        return elements.last != "+" && elements.last != "-" && elements.last != "÷" && elements.last != "x"
     }
     
     var expressionHaveEnoughElement: Bool {
@@ -38,7 +38,7 @@ final class Calculator {
     }
     
     var canAddOperator: Bool {
-        return elements.last != "+" && elements.last != "-"
+        return elements.last != "+" && elements.last != "-" && elements.last != "÷" && elements.last != "x"
     }
     
     var expressionHaveResult: Bool {
@@ -52,33 +52,9 @@ final class Calculator {
         equation.append(number)
     }
     
-    func addAddition() {
+    func addOperator(operatorSymbol: String) {
         if canAddOperator {
-            equation.append(" + ")
-        } else {
-            errorMessage?("Un opérateur est déjà mis !")
-        }
-    }
-    
-    func addSoustraction() {
-        if canAddOperator {
-            equation.append(" - ")
-        } else {
-            errorMessage?("Un opérateur est déjà mis !")
-        }
-    }
-    
-    func addMultiplication() {
-        if canAddOperator {
-            equation.append(" * ")
-        } else {
-            errorMessage?("Un opérateur est déjà mis !")
-        }
-    }
-    
-    func addDivision() {
-        if canAddOperator {
-            equation.append(" / ")
+            equation.append(" \(operatorSymbol) " )
         } else {
             errorMessage?("Un opérateur est déjà mis !")
         }
@@ -87,6 +63,21 @@ final class Calculator {
     func addAC() {
         equation.removeAll()
         textOnScreen?("0")
+    }
+    
+    func operandSelect(left: Double, operand: String, right: Double) -> Double{
+        let result: Double
+        switch operand {
+        case "+": result = left + right
+        case "-": result = left - right
+        case "x": result = left * right
+        case "÷": result = left / right
+            if right == 0 {
+                errorMessage?("Division par zéro impossible !")
+            }
+        default: fatalError("Unknown operator !")
+        }
+        return result
     }
     
     func addEqual() {
@@ -105,21 +96,30 @@ final class Calculator {
         
         // Iterate over operations while an operand still here
         while operationsToReduce.count > 1 {
-            let left = Int(operationsToReduce[0])!
-            let operand = operationsToReduce[1]
-            let right = Int(operationsToReduce[2])!
-            
-            let result: Int
-            switch operand {
-            case "+": result = left + right
-            case "-": result = left - right
-            default: fatalError("Unknown operator !")
+            if let index = operationsToReduce.firstIndex(where: { $0 == "x" || $0 == "÷" }) {
+                let left = Double(operationsToReduce[index - 1])!
+                let operand = operationsToReduce[index]
+                let right = Double(operationsToReduce[index + 1])!
+                operationsToReduce[index] = "\(operandSelect(left: left, operand: operand, right: right).clean)"
+                operationsToReduce.remove(at: index + 1)
+                operationsToReduce.remove(at: index - 1)
+                
+            } else {
+                
+                let left = Double(operationsToReduce[0])!
+                let operand = operationsToReduce[1]
+                let right = Double(operationsToReduce[2])!
+                operationsToReduce = Array(operationsToReduce.dropFirst(3))
+                let finalResult = operandSelect(left: left, operand: operand, right: right).clean
+                operationsToReduce.insert("\(finalResult)", at: 0)
             }
-            
-            operationsToReduce = Array(operationsToReduce.dropFirst(3))
-            operationsToReduce.insert("\(result)", at: 0)
         }
         
         equation.append(" = \(operationsToReduce.first!)")
     }
+}
+extension Double {
+    var clean: String {
+           return self.truncatingRemainder(dividingBy: 1) == 0 ? String(format: "%.0f", self) : String(self)
+        }
 }
