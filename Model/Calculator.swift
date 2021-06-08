@@ -65,7 +65,7 @@ final class Calculator {
         textOnScreen?("0")
     }
     
-    func operandSelect(left: Double, operand: String, right: Double) -> Double{
+    func operandSelect(_ left: Double, _ operand: String, _ right: Double) -> Double{
         let result: Double
         switch operand {
         case "+": result = left + right
@@ -100,7 +100,7 @@ final class Calculator {
                 let left = Double(operationsToReduce[index - 1])!
                 let operand = operationsToReduce[index]
                 let right = Double(operationsToReduce[index + 1])!
-                operationsToReduce[index] = "\(operandSelect(left: left, operand: operand, right: right).clean)"
+                operationsToReduce[index] = "\(operandSelect(left, operand, right).clean)"
                 operationsToReduce.remove(at: index + 1)
                 operationsToReduce.remove(at: index - 1)
                 
@@ -110,7 +110,7 @@ final class Calculator {
                 let operand = operationsToReduce[1]
                 let right = Double(operationsToReduce[2])!
                 operationsToReduce = Array(operationsToReduce.dropFirst(3))
-                let finalResult = operandSelect(left: left, operand: operand, right: right).clean
+                let finalResult = operandSelect(left, operand, right).clean
                 operationsToReduce.insert("\(finalResult)", at: 0)
             }
         }
