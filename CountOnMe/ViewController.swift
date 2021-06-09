@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+final class ViewController: UIViewController {
     
     let calculator = Calculator()
     
@@ -46,13 +46,15 @@ class ViewController: UIViewController {
         calculator.addAC()
     }
     
-    func errorMessage(message: String) -> Void {
+    // Various error messages view
+    private func errorMessage(message: String) -> Void {
         let alertVC = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
         alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
         return self.present(alertVC, animated: true, completion: nil)
     }
     
-    func connectModel() {
+    // Link the Model with ViewController
+    private func connectModel() {
         calculator.errorMessage = errorMessage
         calculator.textOnScreen = {textOnScreen in
             self.textView.text = textOnScreen

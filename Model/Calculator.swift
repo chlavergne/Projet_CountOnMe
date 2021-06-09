@@ -18,33 +18,35 @@ final class Calculator {
         equation = ""
     }
     
+    // Create an array with all the elements in the equation string
     private var elements: [String] {
         return equation.split(separator: " ").map { "\($0)" }
     }
     
-    var equation : String {
+    private var equation : String {
         didSet {
             textOnScreen?(equation)
         }
     }
     
     // Error check computed variables
-    var expressionIsCorrect: Bool {
+    private var expressionIsCorrect: Bool {
         return elements.last != "+" && elements.last != "-" && elements.last != "÷" && elements.last != "x"
     }
     
-    var expressionHaveEnoughElement: Bool {
+    private var expressionHaveEnoughElement: Bool {
         return elements.count >= 3
     }
     
-    var canAddOperator: Bool {
+    private var canAddOperator: Bool {
         return elements.last != "+" && elements.last != "-" && elements.last != "÷" && elements.last != "x"
     }
     
-    var expressionHaveResult: Bool {
+    private var expressionHaveResult: Bool {
         return equation.firstIndex(of: "=") != nil
     }
     
+    //  Entering the equation to be calculated
     func addNumber(number: String) {
         if expressionHaveResult {
             equation = ""
@@ -58,26 +60,6 @@ final class Calculator {
         } else {
             errorMessage?("Un opérateur est déjà mis !")
         }
-    }
-    
-    func addAC() {
-        equation.removeAll()
-        textOnScreen?("0")
-    }
-    
-    func operandSelect(_ left: Double, _ operand: String, _ right: Double) -> Double{
-        let result: Double
-        switch operand {
-        case "+": result = left + right
-        case "-": result = left - right
-        case "x": result = left * right
-        case "÷": result = left / right
-            if right == 0 {
-                errorMessage?("Division par zéro impossible !")
-            }
-        default: fatalError("Unknown operator !")
-        }
-        return result
     }
     
     func addEqual() {
@@ -117,9 +99,32 @@ final class Calculator {
         
         equation.append(" = \(operationsToReduce.first!)")
     }
+    
+    // Reset display to zero
+    func addAC() {
+        equation.removeAll()
+        textOnScreen?("0")
+    }
+    
+    private func operandSelect(_ left: Double, _ operand: String, _ right: Double) -> Double{
+        let result: Double
+        switch operand {
+        case "+": result = left + right
+        case "-": result = left - right
+        case "x": result = left * right
+        case "÷": result = left / right
+            if right == 0 {
+                errorMessage?("Division par zéro impossible !")
+            }
+        default: fatalError("Unknown operator !")
+        }
+        return result
+    }
 }
+
+// Remove the decimal ".0" when the Double is equal to an Int
 extension Double {
     var clean: String {
-           return self.truncatingRemainder(dividingBy: 1) == 0 ? String(format: "%.0f", self) : String(self)
-        }
+        return self.truncatingRemainder(dividingBy: 1) == 0 ? String(format: "%.0f", self) : String(self)
+    }
 }
