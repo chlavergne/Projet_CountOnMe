@@ -23,7 +23,7 @@ final class Calculator {
         return equation.split(separator: " ").map { "\($0)" }
     }
     
-    private var equation : String {
+    var equation : String {
         didSet {
             textOnScreen?(equation)
         }
@@ -76,7 +76,7 @@ final class Calculator {
         // Create local copy of operations
         var operationsToReduce = elements
         
-        // Iterate over operations while an operand still here
+        // Iterate over operations while an operand still here and remove previous calcul if needed
         while operationsToReduce.count > 1 {
             if let index = operationsToReduce.firstIndex(where: { $0 == "x" || $0 == "÷" }) {
                 let left = Double(operationsToReduce[index - 1])!
@@ -85,9 +85,7 @@ final class Calculator {
                 operationsToReduce[index] = "\(operandSelect(left, operand, right).clean)"
                 operationsToReduce.remove(at: index + 1)
                 operationsToReduce.remove(at: index - 1)
-                
             } else {
-                
                 let left = Double(operationsToReduce[0])!
                 let operand = operationsToReduce[1]
                 let right = Double(operationsToReduce[2])!
@@ -114,9 +112,11 @@ final class Calculator {
         case "x": result = left * right
         case "÷": result = left / right
             if right == 0 {
+                equation.removeAll()
+                equation.append(" Error ")
                 errorMessage?("Division par zéro impossible !")
             }
-        default: fatalError("Unknown operator !")
+        default: return 0.0
         }
         return result
     }
@@ -128,3 +128,4 @@ extension Double {
         return self.truncatingRemainder(dividingBy: 1) == 0 ? String(format: "%.0f", self) : String(self)
     }
 }
+

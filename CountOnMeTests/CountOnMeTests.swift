@@ -22,8 +22,8 @@ class CalculatorTest: XCTestCase {
     
     func createAnAddition() {
         calculator.addNumber(number: "3")
-        calculator.addAddition()
-        calculator.addNumber(number: "5")
+        calculator.addOperator(operatorSymbol: "+")
+        calculator.addNumber(number: "7")
     }
     
     func testGivenExpressionHaveAResult_WhenAddNumber_ThenEquationIsAnEmptySring() {
@@ -33,66 +33,60 @@ class CalculatorTest: XCTestCase {
         XCTAssertEqual(calculator.equation, "3")
     }
     
-    func testGivenExpressionIsCorrect_WhenExpressionToCalaculateIsNotFinashingByAnOperator_ThenReturnTrue() {
+    func testGivenExpressionIsFinishingByAnOperator_WhenaddAnOperator_ThenErrorMessage() {
         createAnAddition()
-        XCTAssertTrue(calculator.expressionIsCorrect)
-        calculator.addDivision()
-        XCTAssertFalse(calculator.expressionIsCorrect)
+        calculator.addOperator(operatorSymbol: "+")
+        calculator.addOperator(operatorSymbol: "÷")
+        XCTAssertTrue(calculator.equation == "3 + 7 + ")
+    }
+
+
+    func testGivenExpressionIsEndingByOperator_WhenAddEqual_ThenErrorMessage() {
+        createAnAddition()
+        calculator.addOperator(operatorSymbol: "-")
+        calculator.addEqual()
+        XCTAssertTrue(calculator.equation.firstIndex(of: "=") == nil)
     }
     
-    
-    func testGivenExpressionHaveEnoughElement_WhenExpressionHasThreeOrMoreELements_ThenReturnTrue() {
+    func testGivenExpressionHasnotEnoughElements_WhenAddEqual_ThenErrorMessage() {
         calculator.addNumber(number: "3")
-        XCTAssertFalse(calculator.expressionHaveEnoughElement)
-        createAnAddition()
-        XCTAssertTrue(calculator.expressionHaveEnoughElement)
-    }
-    
-    func testGivenCanAddOperator_WhenExpressionToCalaculateIsNotFinashingByAnOperator_ThenReturnTrue() {
-        createAnAddition()
-        XCTAssertTrue(calculator.canAddOperator)
-        calculator.addSoustraction()
-        XCTAssertFalse(calculator.canAddOperator)
-    }
-    
-    func testGivenExpressionHaveResult_WhenAddEqual_ThenReturnTrue() {
+        calculator.addEqual()
+        XCTAssertTrue(calculator.equation.firstIndex(of: "=") == nil)
         createAnAddition()
         calculator.addEqual()
-        XCTAssertTrue(calculator.expressionHaveResult)
+        XCTAssertTrue(calculator.equation.firstIndex(of: "=") != nil)
     }
     
-    func testGivenExpressionIsNotCorrect_WhenAddEqual_ThenErrorMessage() {
+    func testGivenExpressionIsAnAddition_WhenAddAMultiplication_ThenMultiplicationIsCalculatedFirst() {
         createAnAddition()
-        calculator.addSoustraction()
+        calculator.addOperator(operatorSymbol: "x")
+        calculator.addNumber(number: "2")
         calculator.addEqual()
-        XCTAssertNotEqual(calculator.equation, "8")
+        XCTAssertTrue(calculator.equation == "3 + 7 x 2 = 17")
     }
+    
+    func testGivenExpressionIsADivision_WhenAddAMultiplication_ThenDivisionIsCalculatedFirst() {
+        calculator.addNumber(number: "4")
+        calculator.addOperator(operatorSymbol: "÷")
+        calculator.addNumber(number: "2")
+        calculator.addOperator(operatorSymbol: "x")
+        calculator.addNumber(number: "5")
+        calculator.addEqual()
+        XCTAssertTrue(calculator.equation == "4 ÷ 2 x 5 = 10")
+    }
+    
+    func testGivenExpressionIsADivision_WhenRightElementIsZero_ThenErrorMessage() {
+        calculator.addNumber(number: "4")
+        calculator.addOperator(operatorSymbol: "÷")
+        calculator.addNumber(number: "0")
+        calculator.addEqual()
+        XCTAssertTrue(calculator.equation == " Error  = inf")
+    }
+    
     
     func testGivenAnExpressionExist_WhenTappedACButton_ThenEquationShouldBeEmpty() {
         createAnAddition()
         calculator.addAC()
         XCTAssertTrue(calculator.equation == "")
-    }
-    
-    func testGivenAddAddition_WhenAddAdditionAgain_ThenErrorMessage() {
-        calculator.addAddition()
-        calculator.addAddition()
-        XCTAssertEqual(calculator.equation, " + ")
-    }
-    
-    func testGivenAddSoustraction_WhenAddSoustractionAgain_ThenErrorMessage() {
-        calculator.addSoustraction()
-        calculator.addSoustraction()
-        XCTAssertEqual(calculator.equation, " - ")
-    }
-    
-    func testGivenAddMultiplication_WhenAccessingIt_ThenExist() {
-        let multiplication: () = calculator.addMultiplication()
-        XCTAssertNotNil(multiplication)
-    }
-    
-    func testGivenAddDivision_WhenAccessingIt_ThenExist() {
-        let division: () = calculator.addDivision()
-        XCTAssertNotNil(division)
     }
 }
