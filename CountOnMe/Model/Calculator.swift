@@ -13,6 +13,15 @@ final class Calculator {
     var errorMessage: ((String) -> Void)?
 
     var textOnScreen: ((String) -> Void)?
+    
+    private lazy var numberFormatter: NumberFormatter = {
+            let formatter = NumberFormatter()
+            formatter.numberStyle = .decimal
+            formatter.maximumFractionDigits = 2
+            formatter.minimumIntegerDigits = 0
+            formatter.groupingSeparator = ""
+            return formatter
+        }()
 
     init() {
         equation = ""
@@ -23,7 +32,7 @@ final class Calculator {
         return equation.split(separator: " ").map { "\($0)" }
     }
 
-    var equation: String {
+    private(set) var equation: String {
         didSet {
             textOnScreen?(equation)
         }
@@ -82,7 +91,8 @@ final class Calculator {
                 let left = Double(operationsToReduce[index - 1])!
                 let operand = operationsToReduce[index]
                 let right = Double(operationsToReduce[index + 1])!
-                operationsToReduce[index] = "\(operandSelect(left, operand, right).clean)"
+                let result = operandSelect(left, operand, right)
+                operationsToReduce[index] = numberFormatter.string(for: NSNumber(value: result)) ?? ""
                 operationsToReduce.remove(at: index + 1)
                 operationsToReduce.remove(at: index - 1)
             } else {
@@ -90,8 +100,9 @@ final class Calculator {
                 let operand = operationsToReduce[1]
                 let right = Double(operationsToReduce[2])!
                 operationsToReduce = Array(operationsToReduce.dropFirst(3))
-                let finalResult = operandSelect(left, operand, right).clean
-                operationsToReduce.insert("\(finalResult)", at: 0)
+                let resultToClean = operandSelect(left, operand, right)
+                let finalResult = numberFormatter.string(for: NSNumber(value: resultToClean)) ?? ""
+                operationsToReduce.insert(finalResult, at: 0)
             }
         }
 
@@ -119,12 +130,5 @@ final class Calculator {
         default: return 0.0
         }
         return result
-    }
-}
-
-// Remove the decimal ".0" when the Double is equal to an Int
-extension Double {
-    var clean: String {
-        return self.truncatingRemainder(dividingBy: 1) == 0 ? String(format: "%.0f", self) : String(self)
     }
 }

@@ -35,9 +35,9 @@ class CalculatorTest: XCTestCase {
 
     func testGivenExpressionIsFinishingByAnOperator_WhenaddAnOperator_ThenErrorMessage() {
         createAnAddition()
-        calculator.addOperator(operatorSymbol: "+")
+        calculator.addOperator(operatorSymbol: "-")
         calculator.addOperator(operatorSymbol: "÷")
-        XCTAssertTrue(calculator.equation == "3 + 7 + ")
+        XCTAssertTrue(calculator.equation == "3 + 7 - ")
     }
 
     func testGivenExpressionIsEndingByOperator_WhenAddEqual_ThenErrorMessage() {
@@ -52,6 +52,8 @@ class CalculatorTest: XCTestCase {
         calculator.addEqual()
         XCTAssertTrue(calculator.equation.firstIndex(of: "=") == nil)
         createAnAddition()
+        calculator.addOperator(operatorSymbol: "-")
+        calculator.addNumber(number: "2")
         calculator.addEqual()
         XCTAssertTrue(calculator.equation.firstIndex(of: "=") != nil)
     }
@@ -79,7 +81,7 @@ class CalculatorTest: XCTestCase {
         calculator.addOperator(operatorSymbol: "÷")
         calculator.addNumber(number: "0")
         calculator.addEqual()
-        XCTAssertTrue(calculator.equation == " Error  = inf")
+        XCTAssertTrue(calculator.equation == " Error  = +∞")
     }
 
     func testGivenAnExpressionExist_WhenTappedACButton_ThenEquationShouldBeEmpty() {
@@ -87,4 +89,22 @@ class CalculatorTest: XCTestCase {
         calculator.addAC()
         XCTAssertTrue(calculator.equation == "")
     }
+    
+    func testGivenADivisionBetweenTwoInteger_WhenResultIsADouble_ThenResultShouldHaveTwoDecimalNumber() {
+        calculator.addNumber(number: "8")
+        calculator.addOperator(operatorSymbol: "÷")
+        calculator.addNumber(number: "7")
+        calculator.addEqual()
+        XCTAssertTrue(calculator.equation == "8 ÷ 7 = 1.14")
+    }
+    
+    func testGivenNumber_WhenAddUnknownOperator_ThenReturnDefaultResult() {
+        calculator.addNumber(number: "8")
+        calculator.addOperator(operatorSymbol: ";")
+        calculator.addNumber(number: "7")
+        calculator.addEqual()
+        XCTAssertTrue(calculator.equation == "8 ; 7 = 0")
+    }
+    
+    
 }
