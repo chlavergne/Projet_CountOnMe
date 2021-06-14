@@ -89,7 +89,7 @@ class CalculatorTest: XCTestCase {
         calculator.addAC()
         XCTAssertTrue(calculator.equation == "")
     }
-    
+
     func testGivenADivisionBetweenTwoInteger_WhenResultIsADouble_ThenResultShouldHaveTwoDecimalNumber() {
         calculator.addNumber(number: "8")
         calculator.addOperator(operatorSymbol: "÷")
@@ -97,7 +97,7 @@ class CalculatorTest: XCTestCase {
         calculator.addEqual()
         XCTAssertTrue(calculator.equation == "8 ÷ 7 = 1.14")
     }
-    
+
     func testGivenNumber_WhenAddUnknownOperator_ThenReturnDefaultResult() {
         calculator.addNumber(number: "8")
         calculator.addOperator(operatorSymbol: ";")
@@ -105,6 +105,4 @@ class CalculatorTest: XCTestCase {
         calculator.addEqual()
         XCTAssertTrue(calculator.equation == "8 ; 7 = 0")
     }
-    
-    
 }
