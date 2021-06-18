@@ -55,8 +55,8 @@ final class ViewController: UIViewController {
     // Link the Model with ViewController
     private func connectModel() {
         calculator.errorMessage = errorMessage
-        calculator.textOnScreen = {textOnScreen in
-            self.textView.text = textOnScreen
+        calculator.textOnScreen = {[weak self] textOnScreen in
+            self?.textView.text = textOnScreen
         }
     }
 }
