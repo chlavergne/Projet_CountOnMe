@@ -54,6 +54,10 @@ final class Calculator {
     private var expressionHaveResult: Bool {
         return equation.firstIndex(of: "=") != nil
     }
+    
+    private var expressionFirstElementIsCorrect: Bool {
+        return elements.first != "+" && elements.first != "x" && elements.first != "÷" && elements.first != "-"
+    }
 
     //  Entering the equation to be calculated
     func addNumber(number: String) {
@@ -81,6 +85,11 @@ final class Calculator {
             errorMessage?("Démarrez un nouveau calcul !")
             return
         }
+        
+        guard expressionFirstElementIsCorrect else {
+            errorMessage?("Entrez une expression correcte !")
+            return
+        }
 
         // Create local copy of operations
         var operationsToReduce = elements
@@ -96,7 +105,7 @@ final class Calculator {
                 operationsToReduce.remove(at: index + 1)
                 operationsToReduce.remove(at: index - 1)
             } else {
-               let left = Double(operationsToReduce[0])!
+                let left = Double(operationsToReduce[0])!
                 let operand = operationsToReduce[1]
                 let right = Double(operationsToReduce[2])!
                 operationsToReduce = Array(operationsToReduce.dropFirst(3))
