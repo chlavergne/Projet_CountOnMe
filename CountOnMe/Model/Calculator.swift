@@ -135,6 +135,7 @@ final class Calculator {
                 equation.removeAll()
                 equation.append(" Error ")
                 errorMessage?("Division par zéro impossible !")
+                return 0.0
             }
         default: return 0.0
         }

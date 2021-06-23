@@ -81,7 +81,7 @@ class CalculatorTest: XCTestCase {
         calculator.addOperator(operatorSymbol: "÷")
         calculator.addNumber(number: "0")
         calculator.addEqual()
-        XCTAssertTrue(calculator.equation == " Error  = +∞")
+        XCTAssertTrue(calculator.equation == " Error  = 0")
     }
 
     func testGivenAnExpressionExist_WhenTappedACButton_ThenEquationShouldBeEmpty() {
