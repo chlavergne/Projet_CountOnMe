@@ -14,7 +14,7 @@ final class Calculator {
 
     var textOnScreen: ((String) -> Void)?
 
-     private lazy var numberFormatter: NumberFormatter = {
+    private lazy var numberFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         formatter.maximumFractionDigits = 2
@@ -54,7 +54,7 @@ final class Calculator {
     private var expressionHaveResult: Bool {
         return equation.firstIndex(of: "=") != nil
     }
-    
+
     private var expressionFirstElementIsCorrect: Bool {
         return elements.first != "+" && elements.first != "x" && elements.first != "÷" && elements.first != "-"
     }
@@ -85,7 +85,7 @@ final class Calculator {
             errorMessage?("Démarrez un nouveau calcul !")
             return
         }
-        
+
         guard expressionFirstElementIsCorrect else {
             errorMessage?("Entrez une expression correcte !")
             return
@@ -97,17 +97,29 @@ final class Calculator {
         // Iterate over operations while an operand still here and remove previous calcul if needed
         while operationsToReduce.count > 1 {
             if let index = operationsToReduce.firstIndex(where: { $0 == "x" || $0 == "÷" }) {
-                let left = Double(operationsToReduce[index - 1])!
+                guard let left = Double(operationsToReduce[index - 1]) else {
+                    errorMessage?("Entrez une expression correcte !")
+                    return
+                }
                 let operand = operationsToReduce[index]
-                let right = Double(operationsToReduce[index + 1])!
+                guard let right = Double(operationsToReduce[index + 1]) else {
+                    errorMessage?("Entrez une expression correcte !")
+                    return
+                }
                 let result = operandSelect(left, operand, right)
                 operationsToReduce[index] = formatResult(result: result)
                 operationsToReduce.remove(at: index + 1)
                 operationsToReduce.remove(at: index - 1)
             } else {
-                let left = Double(operationsToReduce[0])!
+                guard let left = Double(operationsToReduce[0]) else {
+                    errorMessage?("Entrez une expression correcte !")
+                    return
+                }
                 let operand = operationsToReduce[1]
-                let right = Double(operationsToReduce[2])!
+                guard let right = Double(operationsToReduce[2]) else {
+                    errorMessage?("Entrez une expression correcte !")
+                    return
+                }
                 operationsToReduce = Array(operationsToReduce.dropFirst(3))
                 let resultToClean = operandSelect(left, operand, right)
                 let finalResult = formatResult(result: resultToClean)
@@ -143,6 +155,6 @@ final class Calculator {
     }
 
     func formatResult(result: Double) -> String {
-       numberFormatter.string(for: NSNumber(value: result))!
+        numberFormatter.string(for: NSNumber(value: result))!
     }
 }
