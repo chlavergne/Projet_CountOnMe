@@ -114,4 +114,47 @@ class CalculatorTest: XCTestCase {
         calculator.addEqual()
         XCTAssertTrue(calculator.equation == "8.2 ÷ 3.4 = 2.41")
     }
+    
+    func testGivenExpressionStartByOperator_WhenAddEqual_ThenErrorMessage() {
+        calculator.addOperator(operatorSymbol: "+")
+        createAnAddition()
+        calculator.addEqual()
+        XCTAssertTrue(calculator.equation.firstIndex(of: "=") == nil)
+    }
+    
+    func testGivenLeftNumberIsNotOfTypeDouble_WhenAddEqual_ThenErrorMessage() {
+        calculator.addNumber(number: "1.1.1")
+        calculator.addOperator(operatorSymbol: "+")
+        calculator.addNumber(number: "3")
+        calculator.addEqual()
+        XCTAssertTrue(calculator.equation.firstIndex(of: "=") == nil)
+    }
+    
+    func testGivenRightNumberIsNotOfTypeDouble_WhenAddEqual_ThenErrorMessage() {
+        calculator.addNumber(number: "3")
+        calculator.addOperator(operatorSymbol: "+")
+        calculator.addNumber(number: "1.1.1")
+        calculator.addEqual()
+        XCTAssertTrue(calculator.equation.firstIndex(of: "=") == nil)
+    }
+    
+    func testGivenLeftNumberInEquationWithPrioritiesIsNotOfTypeDouble_WhenAddEqual_ThenErrorMessage() {
+        createAnAddition()
+        calculator.addOperator(operatorSymbol: "+")
+        calculator.addNumber(number: "1.1.1")
+        calculator.addOperator(operatorSymbol: "x")
+        calculator.addNumber(number: "3")
+        calculator.addEqual()
+        XCTAssertTrue(calculator.equation.firstIndex(of: "=") == nil)
+    }
+    
+    func testGivenRightNumberInEquationWithPrioritiesIsNotOfTypeDouble_WhenAddEqual_ThenErrorMessage() {
+        createAnAddition()
+        calculator.addOperator(operatorSymbol: "+")
+        calculator.addNumber(number: "3")
+        calculator.addOperator(operatorSymbol: "x")
+        calculator.addNumber(number: "1.1.1")
+        calculator.addEqual()
+        XCTAssertTrue(calculator.equation.firstIndex(of: "=") == nil)
+    }
 }
